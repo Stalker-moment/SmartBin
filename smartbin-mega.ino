@@ -74,6 +74,11 @@ String dadhtemp;
 String dadhthum;
 String isAuto;
 
+//==========================[Millis Function)==========================//
+unsigned long previousMillis = 0;  // Waktu terakhir cetakan dilakukan
+const unsigned long interval = 1000;  // Interval waktu antara setiap cetakan (dalam milidetik)
+
+
 //===========================[NORMAL MOVE]==============================//
 void maju(){
   digitalWrite(driver1, HIGH);
@@ -510,6 +515,15 @@ void loop() {
 
   //---------------------[ Send Serial To Nodemcu ESP8266 ]----------------------//
   //Serial.println("testto");
-  Serial.println("*"+disatas+","+disdalam+","+disdepan+","+dakanan+","+datengah+","+dakiri+","+jalanke+","+dadhtemp+","+dadhthum+","+String(counter)+","+isAuto+"#"); //inject wrapping
-  delay(1000);
+  //Serial.println("*"+disatas+","+disdalam+","+disdepan+","+dakanan+","+datengah+","+dakiri+","+jalanke+","+dadhtemp+","+dadhthum+","+String(counter)+","+isAuto+"#"); //inject wrapping
+  //delay(1000);
+  unsigned long currentMillis = millis();  // Ambil waktu saat ini
+
+  // Periksa apakah sudah mencapai interval waktu yang ditentukan
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;  // Perbarui waktu terakhir
+
+    Serial.println("*"+disatas+","+disdalam+","+disdepan+","+dakanan+","+datengah+","+dakiri+","+jalanke+","+dadhtemp+","+dadhthum+","+String(counter)+","+isAuto+"#"); //inject wrapping
+  }
+
 }
