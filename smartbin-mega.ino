@@ -1,5 +1,6 @@
 #include <Servo.h>
 #include "DHT.h"
+#include <NewPing.h>
 
 //UltraSonic Pin Area
 #define echo1 24
@@ -31,7 +32,7 @@
 #define left 40
 
 //Servo Pin Area
-#define servo1 2
+#define servo1 9
 int pos = 0;
 //#define servo2 //Jaga2
 
@@ -45,16 +46,17 @@ int pos = 0;
 
 //PULLUP MANUAL
 #define MasterManual 41
-#define P1 42 //maju
-#define P2 43 //kiri
-#define P3 44 //kanan
-#define P4 45 //mundur
-#define P5 46 //special 
+#define PP1 42 //maju
+#define PP2 43 //kiri
+#define PP3 44 //kanan
+#define PP4 45 //mundur
+#define PP5 46 //special 
 
 //DFPLAYER
 int suara = 4;
 int counter = 0;
 
+#define MAX_DISTANCE 400
 DHT dht(DHTPIN, DHTTYPE);
 Servo servo;  
 
@@ -62,6 +64,7 @@ Servo servo;
 long duration_atas, distance_atas, duration_dalam, distance_dalam, duration_depan, distance_depan; 
 int ValueMasterSwitch, ValueResetCount, ValueMasterManual;
 int ValueRight, ValueCenter, ValueLeft;
+int P1,P2,P3,P4,P5;
 
 String disatas;
 String disdalam;
@@ -73,6 +76,10 @@ String jalanke;
 String dadhtemp;
 String dadhthum;
 String isAuto;
+
+NewPing sonar1(trig1, echo1, MAX_DISTANCE);
+NewPing sonar2(trig2, echo2, MAX_DISTANCE);
+NewPing sonar3(trig3, echo3, MAX_DISTANCE);
 
 //==========================[Millis Function)==========================//
 unsigned long previousMillis = 0;  // Waktu terakhir cetakan dilakukan
@@ -162,7 +169,7 @@ void stop(){
 
 //==============================[Special Move]===============================//
 
-void maju_kanan(){
+void maju_kiri(){
   digitalWrite(driver1, HIGH);
   digitalWrite(driver2, LOW);
 
@@ -175,10 +182,10 @@ void maju_kanan(){
   digitalWrite(driver7, HIGH);
   digitalWrite(driver8, LOW);
 
-  jalanke = "Maju-Kanan";
+  jalanke = "Maju-Kiri";
 }
 
-void maju_kiri(){
+void maju_kanan(){
   digitalWrite(driver1, LOW);
   digitalWrite(driver2, LOW);
 
@@ -191,7 +198,7 @@ void maju_kiri(){
   digitalWrite(driver7, LOW);
   digitalWrite(driver8, LOW);
 
-  jalanke = "Maju-Kiri";
+  jalanke = "Maju-Kanan";
 }
 
 void slide_kanan(){
@@ -201,11 +208,11 @@ void slide_kanan(){
   digitalWrite(driver3, LOW);
   digitalWrite(driver4, HIGH);
 
-  digitalWrite(driver5, LOW);
-  digitalWrite(driver6, HIGH);
+  digitalWrite(driver5, HIGH);
+  digitalWrite(driver6, LOW);
 
-  digitalWrite(driver7, HIGH);
-  digitalWrite(driver8, LOW);
+  digitalWrite(driver7, LOW);
+  digitalWrite(driver8, HIGH);
 
   jalanke = "Slide-Kanan";
 }
@@ -217,11 +224,11 @@ void slide_kiri(){
   digitalWrite(driver3, HIGH);
   digitalWrite(driver4, LOW);
 
-  digitalWrite(driver5, HIGH);
-  digitalWrite(driver6, LOW);
+  digitalWrite(driver5, LOW);
+  digitalWrite(driver6, HIGH);
 
-  digitalWrite(driver7, LOW);
-  digitalWrite(driver8, HIGH);
+  digitalWrite(driver7, HIGH);
+  digitalWrite(driver8, LOW);
 
   jalanke = "Slide-Kiri";
 }
@@ -280,10 +287,10 @@ void setup() {
   servo.attach(servo1);
 
   //setup enable driver
-  analogWrite(ENA1, 150);
-  analogWrite(ENA2, 150);
-  analogWrite(ENB1, 150);
-  analogWrite(ENB2, 150);
+  analogWrite(ENA1, 255);
+  analogWrite(ENA2, 255);
+  analogWrite(ENB1, 255);
+  analogWrite(ENB2, 255);
 
   //setup driver
   pinMode(driver1, OUTPUT);
@@ -313,21 +320,21 @@ void setup() {
   pinMode(ResetCount, INPUT_PULLUP);
 
   //Pullup manual
-  pinMode(P1, INPUT_PULLUP);
-  pinMode(P2, INPUT_PULLUP);
-  pinMode(P3, INPUT_PULLUP);
-  pinMode(P4, INPUT_PULLUP);
-  pinMode(P5, INPUT_PULLUP);
+  pinMode(PP1, INPUT_PULLUP);
+  pinMode(PP2, INPUT_PULLUP);
+  pinMode(PP3, INPUT_PULLUP);
+  pinMode(PP4, INPUT_PULLUP);
+  pinMode(PP5, INPUT_PULLUP);
 }
 
 void loop() {
   ValueMasterSwitch = digitalRead(MasterSwitch);
   ValueResetCount = digitalRead(ResetCount);
   ValueMasterManual = digitalRead(MasterManual);
-
+  
   if(ValueResetCount == 0) return counter = 0;
 
-  if(ValueMasterManual == 0){
+  if(ValueMasterManual == 1){
 
     isAuto = "true";
 
@@ -355,41 +362,21 @@ void loop() {
         dakiri = "LOW";
       }
 
-      digitalWrite(trig1, LOW);
-      delayMicroseconds(2);
-      digitalWrite(trig1, HIGH);
-      delayMicroseconds(10);
-      digitalWrite(trig1, LOW);
-      duration_atas = pulseIn(echo1, HIGH);
-      distance_atas = duration_atas/58.2; 
+      distance_atas = sonar1.ping_cm();
 
-      disatas = String(distance_atas + " Cm");
+      disatas = String(distance_atas);
       //Serial.print(distance_atas);
       //Serial.println(" Centimeter");
-      delay(50);
 
-      digitalWrite(trig2, LOW);
-      delayMicroseconds(2);
-      digitalWrite(trig2, HIGH);
-      delayMicroseconds(10);
-      digitalWrite(trig2, LOW);
-      duration_dalam = pulseIn(echo2, HIGH);
-      distance_dalam = duration_dalam/58.2; 
+      distance_dalam = sonar2.ping_cm();
 
       disdalam = String(distance_dalam);
       //Serial.print(distance_dalam);
       //Serial.println(" Centimeter");
-      delay(50);
 
-      digitalWrite(trig3, LOW);
-      delayMicroseconds(2);
-      digitalWrite(trig3, HIGH);
-      delayMicroseconds(10);
-      digitalWrite(trig3, LOW);
-      duration_depan = pulseIn(echo3, HIGH);
-      distance_depan = duration_depan/58.2; 
+      distance_depan = sonar3.ping_cm();
 
-      disdepan = String(distance_depan + " Cm");
+      disdepan = String(distance_depan);
       //Serial.print(distance_depan);
       //Serial.println(" Centimeter");
       delay(50);
@@ -444,30 +431,28 @@ void loop() {
 
       } else {
         if(distance_atas > 0 && distance_atas < 40){
+
         servo.writeMicroseconds(1000);
           pos = -720;
           
-          delay(3000);
+          delay(7000);
         
           servo.writeMicroseconds(1500); 
           pos = 0;
           
-          delay(5000);
+          delay(3000);
+
           digitalWrite(suara,LOW);
           delay(100);
           digitalWrite(suara,HIGH);
-          //delay(3000);
-          
+
           servo.writeMicroseconds(2000); 
           pos = 720;
           
-          delay(3000);
+          delay(4000);
           
           servo.writeMicroseconds(1500); 
           pos = 0;
-          
-          delay(500);  
-
           counter = counter + 1;
         } else {
           //myservo.write(0); //do nothing
@@ -481,11 +466,11 @@ void loop() {
 
     isAuto = "false";
 
-    digitalRead(P1);
-    digitalRead(P2);
-    digitalRead(P3);
-    digitalRead(P4);
-    digitalRead(P5);
+    P1 = digitalRead(PP1);
+    P2 = digitalRead(PP2);
+    P3 = digitalRead(PP3);
+    P4 = digitalRead(PP4);
+    P5 = digitalRead(PP5);
 
     //------------------------------------[MANUAL MOVE]-------------------------------------//
     if(P1 == LOW && P2 == HIGH && P3 == HIGH && P4 == HIGH && P5 == HIGH){
