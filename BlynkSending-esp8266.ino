@@ -42,20 +42,24 @@ int TankCapacity = 38;
 BlynkTimer timer;
 
 BLYNK_WRITE(V0) {
-  bool value1 = param.asInt();
+  int value1 = param.asInt();
   if (value1 == 1) {
     digitalWrite(P1, LOW);
+    Serial.println("ON");
   } else {
     digitalWrite(P1, HIGH);
+    Serial.println("OFF");
   }
 }
 
 BLYNK_WRITE(V9) {
-  bool value2 = param.asInt();
+  int value2 = param.asInt();
   if (value2 == 1) {
     digitalWrite(P2, LOW);
+    Serial.println("reset count");
   } else {
     digitalWrite(P2, HIGH);
+    Serial.println("Normal Count");
   }
 }
 
@@ -63,9 +67,9 @@ void sendSensor()
 {
   // You can send any value at any time.
   // Please don't send more that 10 values per second.
-  Blynk.virtualWrite(V1, atas);
+  Blynk.virtualWrite(V1, atas+" Cm");
   Blynk.virtualWrite(V2, dalam+" Cm");
-  Blynk.virtualWrite(V3, depan); 
+  Blynk.virtualWrite(V3, depan+" Cm"); 
   Blynk.virtualWrite(V4, counter+"|"+isAuto); 
   Blynk.virtualWrite(V5, temp+" °C");  
   Blynk.virtualWrite(V6, humi+" %");  
