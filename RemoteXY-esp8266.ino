@@ -91,6 +91,7 @@ void loop()
   Serial.println(RemoteXY.joystick_y);
 
   if(RemoteXY.b_cswitch == 1){
+    digitalWrite(P1, LOW);
     if (RemoteXY.joystick_x <= 50 && RemoteXY.joystick_x >= -50 ){
       if (RemoteXY.joystick_y >= 50){
         Serial.println("MAJUUU");
