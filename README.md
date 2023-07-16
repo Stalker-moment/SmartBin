@@ -16,9 +16,9 @@
 - Jumper Cable
 
 ## Software Requiment :
-- Arduino IDE
+- [Arduino IDE](https://www.arduino.cc/en/software/)
 - [Blynk](https://blynk.cloud/)
-- RemoteXY
+- [RemoteXY](https://remotexy.com/en)
 
 ## This repo connected with other platform :
 - [Telegram Bot](https://github.com/Stalker-moment/TeleBot-bin)
