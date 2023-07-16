@@ -7,6 +7,7 @@
 - Arduino Mega 
 - Nodemcu lolin V3 ESP8266 with sield (2pcs)
 - L298N Driver (2pcs)
+- Ultrasonic HC-SR04 Sensor (3pcs)
 - TCRT5000 line tracer (3pcs)
 - Dfplayer mini & sdcard
 - DHT22/DHT11
