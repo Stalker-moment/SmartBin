@@ -182,6 +182,5 @@ tanklevel = map(dalam.toInt(), TankCapacity, 10, 0, 100);
 isAuto = dt[10];
 
 //------------------Ga usah Delay--------------------//
-//------------------Hak Cipta------------------------//
 }
 
