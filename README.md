@@ -1,7 +1,7 @@
 # SmartBin Project 
 
 ## Using :
-[![Node.js](https://img.shields.io/badge/Node.js-18.16.1-green)](https://nodejs.org/) [![C++](https://img.shields.io/badge/C++-ARDUINO-blue)](https://en.cppreference.com/) [![JavaScript](https://img.shields.io/badge/JavaScript-yellow)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white) ![Arduino](https://img.shields.io/badge/-Arduino-00979D?style=for-the-badge&logo=Arduino&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 
 ## Device Requirement :
 - Arduino Mega 
