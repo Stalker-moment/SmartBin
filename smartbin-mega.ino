@@ -86,6 +86,12 @@ unsigned long previousMillis = 0;  // Waktu terakhir cetakan dilakukan
 const unsigned long interval = 1000;  // Interval waktu antara setiap cetakan (dalam milidetik)
 
 
+void gosuara(){
+  digitalWrite(suara,LOW);
+  delay(100);
+  digitalWrite(suara,HIGH);
+}
+
 //===========================[NORMAL MOVE]==============================//
 void maju(){
   digitalWrite(driver1, HIGH);
@@ -302,6 +308,10 @@ void setup() {
   pinMode(driver7, OUTPUT);
   pinMode(driver8, OUTPUT);
 
+  //setup DFplayer
+  pinMode(suara,OUTPUT);
+  digitalWrite(suara,HIGH);
+
   //setup line tracer
   pinMode(right, INPUT);
   pinMode(center, INPUT);
@@ -331,7 +341,7 @@ void loop() {
   ValueMasterSwitch = digitalRead(MasterSwitch);
   ValueResetCount = digitalRead(ResetCount);
   ValueMasterManual = digitalRead(MasterManual);
-  
+
   if(ValueResetCount == 0) return counter = 0;
 
   if(ValueMasterManual == 1){
@@ -439,16 +449,13 @@ void loop() {
         
           servo.writeMicroseconds(1500); 
           pos = 0;
-          
-          delay(3000);
 
-          digitalWrite(suara,LOW);
-          delay(100);
-          digitalWrite(suara,HIGH);
+          delay(3000);
 
           servo.writeMicroseconds(2000); 
           pos = 720;
           
+          gosuara();
           delay(4000);
           
           servo.writeMicroseconds(1500); 
